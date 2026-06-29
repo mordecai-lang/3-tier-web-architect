@@ -17,15 +17,6 @@ on:
 jobs:
   plan:
     runs-on: ubuntu-latest
-<<<<<<< HEAD
-      
-=======
-
-    defaults:
-      run:
-        working-directory: 3-tier-web-architect
-
->>>>>>> 62a334a (Test terraform push)
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -54,7 +45,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: tfplan
-          
+          path: tfplan
 
   apply:
     needs: plan
@@ -83,7 +74,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: tfplan
-          path: 3-tier-web-architect/
+          path: .
 
       - name: Terraform Apply
         run: terraform apply -auto-approve tfplan
