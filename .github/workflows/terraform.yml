@@ -20,7 +20,8 @@ jobs:
 
     defaults:
       run:
-        working-directory: terraform
+        working-directory: 3-tier-web-architect
+      
 
     steps:
       - name: Checkout code
