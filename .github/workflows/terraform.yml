@@ -18,7 +18,7 @@ jobs:
   plan:
     runs-on: ubuntu-latest
       
-   steps:
+    steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
@@ -46,7 +46,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: tfplan
-          path: terraform/tfplan
+          
 
   apply:
     needs: plan
@@ -54,9 +54,7 @@ jobs:
 
     environment: production
 
-    defaults:
-      run:
-        working-directory: terraform
+  
 
     steps:
       - name: Checkout code
