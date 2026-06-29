@@ -1,0 +1,88 @@
+name: Terraform
+
+on:
+  push:
+    branches:
+      - main
+  #  paths:
+  #    - "3-tier-web-architect/**"
+  #    - ".github/workflows/terraform.yml"
+
+  #pull_request:
+  #  paths:
+  #    - "terraform/**"
+
+  workflow_dispatch:
+
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: terraform
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS2 }}
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform Format
+        run: terraform fmt -check
+
+      - name: Terraform Validate
+        run: terraform validate
+
+      - name: Terraform Plan
+        run: terraform plan -out=tfplan
+
+      - name: Upload tfplan artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: tfplan
+          path: terraform/tfplan
+
+  apply:
+    needs: plan
+    runs-on: ubuntu-latest
+
+    environment: production
+
+    defaults:
+      run:
+        working-directory: terraform
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS2 }}
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Download tfplan artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: tfplan
+          path: 3-tier-web-architect/
+
+      - name: Terraform Apply
+        run: terraform apply -auto-approve tfplan
+#az ad sp create-for-rbac  --name "terraform-cicd-sp"  --role Contributor --scopes /subscriptions/0f5aa281-d691-4a42-8d26-e1225b57ad63 --json-aoth
