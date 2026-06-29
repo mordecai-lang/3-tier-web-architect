@@ -17,7 +17,15 @@ on:
 jobs:
   plan:
     runs-on: ubuntu-latest
+<<<<<<< HEAD
       
+=======
+
+    defaults:
+      run:
+        working-directory: 3-tier-web-architect
+
+>>>>>>> 62a334a (Test terraform push)
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
