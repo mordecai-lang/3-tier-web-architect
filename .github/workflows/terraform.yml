@@ -17,13 +17,8 @@ on:
 jobs:
   plan:
     runs-on: ubuntu-latest
-
-    defaults:
-      run:
-        working-directory: 3-tier-web-architect
       
-
-    steps:
+   steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
